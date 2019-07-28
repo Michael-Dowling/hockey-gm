@@ -1,13 +1,9 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import Table from 'react-bootstrap/Table'
-import Game from './game_sim';
-
-
 
     class Boxscore extends React.Component{
-        render(){
-
+        render() {
             return(
                 <Table bordered size="sm">
                     <thead>
@@ -24,7 +20,7 @@ import Game from './game_sim';
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{this.props.game.homeAbbr}</td>
+                            <td>{this.props.game.home.abbr}</td>
                             <td>{this.props.game.homeGperP[0]}</td>
                             <td>{this.props.game.homeGperP[1]}</td>
                             <td>{this.props.game.homeGperP[2]}</td>
@@ -34,7 +30,7 @@ import Game from './game_sim';
                             <td>{this.props.game.homeScore}</td>
                         </tr>
                         <tr>
-                            <td>{this.props.game.awayAbbr}</td>
+                            <td>{this.props.game.away.abbr}</td>
                             <td>{this.props.game.awayGperP[0]}</td>
                             <td>{this.props.game.awayGperP[1]}</td>
                             <td>{this.props.game.awayGperP[2]}</td>
@@ -51,20 +47,16 @@ import Game from './game_sim';
 
 
     export default class Scoreboard extends React.Component{
-        
-        render(){
-            var game = new Game();
-            while(!game.gameDone){
-                console.log(game.nextEvent());
-            }
-            console.log(game.gameOver());
+        constructor(props) {
+            super(props);
+            this.game = this.props.game;
+        }
 
-            console.log(game.homeShots);
-            console.log(game.awayShots);
+        render(){
             return (
                 <div>
-                    <h1>Leafs vs. Bruins</h1>
-                    <Boxscore game={game} />
+                    <h1>{this.game.home.name} vs. {this.game.away.name}</h1>
+                    <Boxscore game={this.game} />
                 </div>
             );
         }

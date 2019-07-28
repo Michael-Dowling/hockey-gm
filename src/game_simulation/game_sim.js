@@ -22,11 +22,10 @@ const endResultEvents = {
 }
 
 export default class Game {
-    constructor(){
-        this.homeTeam = "Toronto Maple Leafs";
-        this.awayTeam = "Boston Bruins";
-        this.homeAbbr = "TOR";
-        this.awayAbbr = "BOS";
+    constructor(home, away){
+        console.log(home.name);
+        this.home = home;
+        this.away = away;
         this.homeScore = 0;
         this.awayScore = 0;
         this.timeRemaining = 20.0;
@@ -37,12 +36,8 @@ export default class Game {
         this.awayGperP = [0, 0, 0, 0]
         this.homeShots = 0;
         this.awayShots = 0;
-        this.awayGoalieSVP = 0.912;
-        this.homeGoalieSVP = 0.917;
-        this.homeOffense = 80;
-        this.awayOffense = 65;
-        this.homeDefense = 55;
-        this.awayDefense = 70;
+        console.log(this.shotQuality("home"));
+        console.log(this.shotQuality("away"));
     }
 
     pickEvent() {  
@@ -61,9 +56,8 @@ export default class Game {
 
     /** Calculate the odds of a shot being taken by the home team */
     shotOdds(){
-        var shotChance = 0.5 - (this.homeOffense - this.awayDefense) * 0.01 + 
-                (this.awayOffense - this.homeDefense) * 0.01;
-        
+        var shotChance = 0.5 - (this.home.offense - this.away.defense) * 0.01 + 
+                (this.away.offense - this.home.defense) * 0.01;
         //TODO: account for game situation (PP, EN, etc.)
 
         return shotChance;
@@ -71,8 +65,8 @@ export default class Game {
 
     /** Calculate the odds of a shot going in, based on teams and game situation */
     shotQuality(team) {
-        return (team === "home" ? this.awayGoalieSVP - (this.homeOffense-60)*0.0005 :
-                    this.homeGoalieSVP - (this.awayOffense-60)*0.01);
+        return (team === "home" ? this.away.GoalieSVP - (this.home.offense-60)*0.0005 :
+                    this.home.GoalieSVP - (this.away.offense-60)*0.0005);
     }
 
     /** Handle shot events - determine who shot, and if it went in */
@@ -82,33 +76,37 @@ export default class Game {
             this.homeShots++;
             if (Math.random() > this.shotQuality("home")){
                 //home goal
+                this.prevPlay = endResultEvents.GOAL;
                 this.homeScore++;
                 this.homeGperP[Math.min(this.period - 1, 3)]++;
                 if (this.period >= 4)
                     this.gameDone = true;
-                return (this.homeTeam + " goal! " + this.homeAbbr + " " + 
-                        this.homeScore + ", " + this.awayAbbr + " " + this.awayScore);
+                return (this.home.name + " goal! " + this.home.abbr + " " + 
+                        this.homeScore + ", " + this.away.abbr + " " + this.awayScore);
             }
-            return (this.homeAbbr + " shot saved.");
+            this.prevPlay = endResultEvents.SAVE;
+            return (this.home.abbr + " shot saved.");
         }
         //away shot
         this.awayShots++;
         if (Math.random() > this.shotQuality("away")){
             //away goal
+            this.prevPlay = endResultEvents.GOAL;
             this.awayScore++;
             this.awayGperP[Math.min(this.period - 1, 3)]++;
             if (this.period >= 4)
                 this.gameDone = true;
-            return (this.awayTeam + " goal! " + this.homeAbbr + " " + 
-                    this.homeScore + ", " + this.awayAbbr + " " + this.awayScore);
+            return (this.away.name + " goal! " + this.home.abbr + " " + 
+                    this.homeScore + ", " + this.away.abbr + " " + this.awayScore);
         }
-        return (this.awayAbbr + " shot saved.");
+        this.prevPlay = endResultEvents.GOAL;
+        return (this.away.abbr + " shot saved.");
     }
 
     /** return string summarizing the game */
     gameOver() {
-        return "Game over, final score: " + this.homeTeam + " " + this.homeScore + " - " +
-                this.awayTeam + " " + this.awayScore + ".";
+        return "Game over, final score: " + this.home.name + " " + this.homeScore + " - " +
+                this.away.name + " " + this.awayScore + ".";
     }
 
     /** simulate the next game event */
