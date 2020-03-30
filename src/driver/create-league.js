@@ -1,4 +1,5 @@
 import {gaussian, randInt} from '../util';
+import {Skater} from '../player';
 
 const atlanticDivision = {
     'Toronto Maple Leafs': 'TOR',
@@ -53,6 +54,12 @@ function genTeams() {
             GoalieSVP: gaussian(0.910, 0.008),
             offense: gaussian(60, 7.5),
             defense: gaussian(60, 7.5),
+            C : new Skater('C'),
+            LW : new Skater('LW'),
+            RW : new Skater('RW'),
+            D1 : new Skater('D'),
+            D2 : new Skater('D'),
+            G : new Skater('G'),
             seasonWins: 0,
             seasonLosses: 0,
             seasonOTL: 0,
@@ -142,7 +149,7 @@ export default class createLeagueHelper {
     genSchedule() {
         console.log("generating schedule");
         this.schedule = [];
-        for (let i=0; i<84; i++){
+        for (let i=0; i<82; i++){
             this.schedule.push(daySchedule8Teams(i));
         }
     }
