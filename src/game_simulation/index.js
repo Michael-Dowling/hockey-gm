@@ -1,3 +1,3 @@
-import Scoreboard from './game_boxscore'
+import Scoreboard from './scoreboard'
 
 export {Scoreboard}

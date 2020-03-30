@@ -23,7 +23,6 @@ const endResultEvents = {
 
 export default class Game {
     constructor(home, away){
-        console.log(home.name);
         this.home = home;
         this.away = away;
         this.homeScore = 0;
@@ -36,8 +35,7 @@ export default class Game {
         this.awayGperP = [0, 0, 0, 0]
         this.homeShots = 0;
         this.awayShots = 0;
-        console.log(this.shotQuality("home"));
-        console.log(this.shotQuality("away"));
+        this.events = []
     }
 
     pickEvent() {  
@@ -56,16 +54,16 @@ export default class Game {
 
     /** Calculate the odds of a shot being taken by the home team */
     shotOdds(){
-        var shotChance = 0.5 - (this.home.offense - this.away.defense) * 0.01 + 
-                (this.away.offense - this.home.defense) * 0.01;
+        var shotChance = 0.5 + (this.home.offense - this.away.defense) * 0.005 - 
+                (this.away.offense - this.home.defense) * 0.005;
         //TODO: account for game situation (PP, EN, etc.)
 
         return shotChance;
     }
 
     /** Calculate the odds of a shot going in, based on teams and game situation */
-    shotQuality(team) {
-        return (team === "home" ? this.away.GoalieSVP - (this.home.offense-60)*0.0005 :
+    saveOdds(shootingTeam) {
+        return (shootingTeam === "home" ? this.away.GoalieSVP - (this.home.offense-60)*0.0005 :
                     this.home.GoalieSVP - (this.away.offense-60)*0.0005);
     }
 
@@ -74,7 +72,7 @@ export default class Game {
         if (Math.random() < this.shotOdds()) {
             //home shot
             this.homeShots++;
-            if (Math.random() > this.shotQuality("home")){
+            if (Math.random() > this.saveOdds("home")){
                 //home goal
                 this.prevPlay = endResultEvents.GOAL;
                 this.homeScore++;
@@ -89,7 +87,7 @@ export default class Game {
         }
         //away shot
         this.awayShots++;
-        if (Math.random() > this.shotQuality("away")){
+        if (Math.random() > this.saveOdds("away")){
             //away goal
             this.prevPlay = endResultEvents.GOAL;
             this.awayScore++;
@@ -139,12 +137,19 @@ export default class Game {
             return event;
         }
         if (event === "PENALTY") {
-            this.prevPlay = endResultEvents.ICING;
+            this.prevPlay = endResultEvents.PENALTY;
             return event;
         }
 
         return "This failed."
     }
-    
+
+    /** Sim the entire game */
+    simulateGame() {
+        while (!this.gameDone) {
+            let event = this.nextEvent();
+            this.events.push(event);
+        }
+    }
 }
 
