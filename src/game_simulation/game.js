@@ -21,6 +21,22 @@ const endResultEvents = {
     END_OF_PERIOD : 5
 }
 
+function shotContributionOdds(player, position) {
+    return [player.overall, player.overall];
+}
+
+function goalieSaveOdds(goalie) {
+    return (goalie.overall-60)/5 * 0.008 + .910;
+}
+
+function shotDangerContribution(player, position) {
+    return player.overall;
+}
+
+function dangerShotSuppressionContribution(player, position) {
+    return player.overall;
+}
+
 export default class Game {
     constructor(home, away){
         this.home = home;
@@ -36,6 +52,8 @@ export default class Game {
         this.homeShots = 0;
         this.awayShots = 0;
         this.events = []
+        this.homePlayersOn = home.players;
+        this.awayPlayersOn = away.players;
     }
 
     pickEvent() {  
@@ -54,17 +72,53 @@ export default class Game {
 
     /** Calculate the odds of a shot being taken by the home team */
     shotOdds(){
-        var shotChance = 0.5 + (this.home.offense - this.away.defense) * 0.005 - 
-                (this.away.offense - this.home.defense) * 0.005;
-        //TODO: account for game situation (PP, EN, etc.)
+        // look at offensive strength of players on ice
+        let [homeShotOdds, homeSuppressionOdds] = 
+            shotContributionOdds(this.homePlayersOn.C, 'C') +
+            shotContributionOdds(this.homePlayersOn.LW, 'LW') +
+            shotContributionOdds(this.homePlayersOn.RW, 'RW') +
+            shotContributionOdds(this.homePlayersOn.D1, 'D') +
+            shotContributionOdds(this.homePlayersOn.D2, 'D');
+        
+        let [awayShotOdds, awaySuppressionOdds] = 
+            shotContributionOdds(this.awayPlayersOn.C, 'C') +
+            shotContributionOdds(this.awayPlayersOn.LW, 'LW') +
+            shotContributionOdds(this.awayPlayersOn.RW, 'RW') +
+            shotContributionOdds(this.awayPlayersOn.D1, 'D') +
+            shotContributionOdds(this.awayPlayersOn.D2, 'D');
+        
+        let shotChance = 0.5 + (homeShotOdds - awaySuppressionOdds) * 0.009 - 
+                (awayShotOdds - homeSuppressionOdds) * 0.009;
+        
+        // TODO: account for game situation (PP, EN, etc.)
 
         return shotChance;
     }
 
     /** Calculate the odds of a shot going in, based on teams and game situation */
     saveOdds(shootingTeam) {
-        return (shootingTeam === "home" ? this.away.GoalieSVP - (this.home.offense-60)*0.0005 :
-                    this.home.GoalieSVP - (this.away.offense-60)*0.0005);
+        if (shootingTeam === "home") {
+            var offensePlayersOnIce = this.homePlayersOn;
+            var defensePlayersOnIce = this.awayPlayersOn;
+        } else {
+            offensePlayersOnIce = this.awayPlayersOn;
+            defensePlayersOnIce = this.homePlayersOn;
+        }
+
+        let shotDanger = shotDangerContribution(offensePlayersOnIce.C, 'C') + 
+                        shotDangerContribution(offensePlayersOnIce.LW, 'LW') + 
+                        shotDangerContribution(offensePlayersOnIce.RW, 'RW') + 
+                        shotDangerContribution(offensePlayersOnIce.D1, 'D') + 
+                        shotDangerContribution(offensePlayersOnIce.D2, 'D');
+        
+        let dangerSuppression = dangerShotSuppressionContribution(defensePlayersOnIce.C, 'C') +
+                dangerShotSuppressionContribution(defensePlayersOnIce.LW, 'LW') +
+                dangerShotSuppressionContribution(defensePlayersOnIce.RW, 'RW') +
+                dangerShotSuppressionContribution(defensePlayersOnIce.D1, 'D') +
+                dangerShotSuppressionContribution(defensePlayersOnIce.D2, 'D');
+
+
+        return goalieSaveOdds(defensePlayersOnIce.G) - (shotDanger-dangerSuppression)*0.0001;
     }
 
     /** Handle shot events - determine who shot, and if it went in */
@@ -109,8 +163,6 @@ export default class Game {
 
     /** simulate the next game event */
     nextEvent() {
-        var event = this.pickEvent();
-
         var timeElapsed = Math.random() * 1 + 0.02;
 
         this.timeRemaining -= timeElapsed;
@@ -124,6 +176,8 @@ export default class Game {
             this.prevPlay = endResultEvents.END_OF_PERIOD;
             return "End of period " + (this.period-1) + ".";
         }
+
+        var event = this.pickEvent();
 
         if (event === "SHOT"){
             return this.handleShot()

@@ -13,13 +13,9 @@ export default class Season {
         let dayOfSeason = 0
         for (let i=0; i<this.seasonLength; i++) {
             this.simDay(i);
+            this.dayOfSeason = i;
         }
-        // while(this.daysLeft > 0){
-        //     let result = this.simGame(this.home, this.away);
-        //     result ? this.homeWins++ : this.awayWins++;
-        //     this.daysLeft--;
-        //     console.log("Leafs record: " + this.homeWins + "-" + this.awayWins);
-        // }
+
         console.log("season over");
         console.log(this.teams)
     }
@@ -51,6 +47,15 @@ export default class Season {
                     home.seasonLosses++
                 }
             }
+            home.seasonGF += game.homeScore;
+            home.seasonGA += game.awayScore;
+            home.seasonSF += game.homeShots;
+            home.seasonSA += game.awayShots;
+            away.seasonGF += game.awayScore;
+            away.seasonGA += game.homeScore;
+            away.seasonSF += game.awayShots;
+            away.seasonSA += game.homeShots;
+
         }
     }
 

@@ -16,7 +16,8 @@ const defensiveCategories = [
     'Shot Blocking',
     'Body Checking',
     'Penalty Killing',
-    'Faceoffs'
+    'Faceoffs',
+    'Positioning'
 ]
 
 const athleticCategories = [
