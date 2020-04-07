@@ -1,3 +1,5 @@
+import {chooseEventUsingWeights} from '../util'
+
 const baseEventTypes = [
     "SHOT",
     "OFFSIDE",
@@ -21,8 +23,21 @@ const endResultEvents = {
     END_OF_PERIOD : 5
 }
 
+const shotOddsByPosition = {
+    'C': 26,
+    'LW': 26,
+    'RW': 26,
+    'D1': 11,
+    'D2': 11
+}
+
+/** returns an array containing [the odds of the player contributing to a shot on offense,
+ * the odds of the player suppressing opponent shots on defense]. Forwards contribute more
+ * to the first, defense more to the second. Essentially returns a measure of how good 
+ * the player is at driving play offensively and defensively */
 function shotContributionOdds(player, position) {
-    return [player.overall, player.overall];
+    if (position === player.position)
+        return [player.playDrivingOffense, player.playDrivingDefense];
 }
 
 function goalieSaveOdds(goalie) {
@@ -30,11 +45,28 @@ function goalieSaveOdds(goalie) {
 }
 
 function shotDangerContribution(player, position) {
-    return player.overall;
+    if (position === player.position)
+        return player.shotQualityOffense;
 }
 
 function dangerShotSuppressionContribution(player, position) {
-    return player.overall;
+    if (position === player.position)
+        return player.shotQualityDefense;
+}
+
+function chooseShooter(players) {
+    let shotOdds = []
+    const oddsByPosition = Object.values(shotOddsByPosition);
+    const positions = Object.keys(shotOddsByPosition);
+    for (let i = 0; i<5; i++) {
+        shotOdds.push(oddsByPosition[i] * players[positions[i]].shotQualityOffense);
+        // console.log(players[positions[i]])
+        // console.log(players[positions[i]].shotContributionOdds);
+    }
+    
+    let position = chooseEventUsingWeights(positions, shotOdds);
+    // console.log(position)
+    return players[position];
 }
 
 export default class Game {
@@ -60,14 +92,7 @@ export default class Game {
         let adjustedEventOdds = baseEventTypesFrequency.slice()
         //TODO: adjust event odds somewhat based on situation (PP, EN, etc)
         
-        var weightedRand = Math.random() * adjustedEventOdds.reduce((a, b) => a + b, 0)
-        var sum = 0
-        for (var i=0; i<baseEventTypesFrequency.length; i++){
-            sum += baseEventTypesFrequency[i];
-            if (weightedRand < sum){
-                return baseEventTypes[i];
-            }
-        }
+        return chooseEventUsingWeights(baseEventTypes, adjustedEventOdds);
     }
 
     /** Calculate the odds of a shot being taken by the home team */
@@ -126,8 +151,11 @@ export default class Game {
         if (Math.random() < this.shotOdds()) {
             //home shot
             this.homeShots++;
-            if (Math.random() > this.saveOdds("home")){
+            var shooter = chooseShooter(this.homePlayersOn);
+            shooter.seasonShots++;
+            if (Math.random() > this.saveOdds("home", shooter)){
                 //home goal
+                shooter.seasonGoals++;
                 this.prevPlay = endResultEvents.GOAL;
                 this.homeScore++;
                 this.homeGperP[Math.min(this.period - 1, 3)]++;
@@ -141,8 +169,11 @@ export default class Game {
         }
         //away shot
         this.awayShots++;
-        if (Math.random() > this.saveOdds("away")){
+        shooter = chooseShooter(this.awayPlayersOn);
+        shooter.seasonShots++;
+        if (Math.random() > this.saveOdds("away", shooter)){
             //away goal
+            shooter.seasonGoals++;
             this.prevPlay = endResultEvents.GOAL;
             this.awayScore++;
             this.awayGperP[Math.min(this.period - 1, 3)]++;

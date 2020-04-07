@@ -1,3 +1,3 @@
-import {gaussian, randInt} from './random';
+import {gaussian, randInt, chooseEventUsingWeights} from './random';
 
-export {gaussian, randInt}
+export {gaussian, randInt, chooseEventUsingWeights}

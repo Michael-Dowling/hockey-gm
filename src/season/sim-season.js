@@ -10,7 +10,6 @@ export default class Season {
     }
 
     simSeason() {
-        let dayOfSeason = 0
         for (let i=0; i<this.seasonLength; i++) {
             this.simDay(i);
             this.dayOfSeason = i;

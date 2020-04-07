@@ -1,4 +1,4 @@
-import {gaussian} from '../util'
+import {gaussian, randInt} from '../util'
 
 const offensiveCategories = [
     'Offensive Intelligence',
@@ -15,7 +15,7 @@ const defensiveCategories = [
     'Poke Checking',
     'Shot Blocking',
     'Body Checking',
-    'Penalty Killing',
+    'Stick Checking',
     'Faceoffs',
     'Positioning'
 ]
@@ -24,18 +24,22 @@ const athleticCategories = [
     'Skating',
     'Agility',
     'Strength',
-    'Hand Eye',
+    'Acceleration',
     'Balance'
 ]
 
 export default class Skater {
     constructor(position) {
         this.position = position;
-        this.offensiveRatings = []
-        this.defensiveRatings = []
-        this.athleticRatings = []
-        this.createPlayer(position)
-        this.overall = this.calculateOverall()
+        this.offensiveRatings = [];
+        this.defensiveRatings = [];
+        this.athleticRatings = [];
+        this.createPlayer(position);
+        this.age = randInt(18, 36);
+        this.calculateOveralls();
+        this.seasonShots = 0;
+        this.seasonGoals = 0;
+        this.seasonAssists = 0;
     }
 
     createPlayer(position) {
@@ -68,33 +72,23 @@ export default class Skater {
                 this.defensiveRatings.push(gaussian(defenseModifier, 5))
         }
         // set athletic categories
-        for (let i=0; i<offensiveCategories; i++) {
+        for (let i=0; i<athleticCategories.length; i++) {
             this.athleticRatings.push(gaussian(playerModifier, 5))
         }
     }
 
-    calculateOverall() {
-        if (this.position === 'D') {
-            var dCatsWeight = 1.1;
-            var oCatsWeight = 0.9;
-        } else {
-            dCatsWeight = 0.9;
-            oCatsWeight = 1.1;
-        }
-        let weightedTotal = 0;
-        let weightsTotal = 0;
-        for (let i = 0; i<offensiveCategories.length; i++) {
-            weightedTotal += this.offensiveRatings[i] * oCatsWeight;
-            weightsTotal += oCatsWeight;
-        }
-        for (let i=0; i<defensiveCategories.length; i++) {
-            weightedTotal += this.defensiveRatings[i] * dCatsWeight;
-            weightsTotal += dCatsWeight;
-        }
-        for (let i = 0; i< athleticCategories.legnth; i++) {
-            weightedTotal += this.athleticRatings[i];
-            weightsTotal++;
-        }
-        return weightedTotal/weightsTotal;
+    calculateOveralls() {
+
+        let oTotal = this.offensiveRatings.reduce((a,b) => a+b,0);
+        let dTotal = this.defensiveRatings.reduce((a,b) => a+b,0);
+        let aTotal = this.athleticRatings.reduce((a,b) => a+b,0);
+        
+        this.playDrivingOffense = (oTotal*1.5+aTotal)/(this.offensiveRatings.length*1.5+this.athleticRatings.length);
+        this.playDrivingDefense = (dTotal*1.5+aTotal)/(this.defensiveRatings.length*1.5+this.athleticRatings.length);
+        this.shotQualityOffense = (oTotal*1.5+aTotal)/(this.offensiveRatings.length*1.5+this.athleticRatings.length);
+        this.shotQualityDefense = (dTotal*1.5+aTotal)/(this.defensiveRatings.length*1.5+this.athleticRatings.length);
+        this.overall =  (this.playDrivingOffense + this.playDrivingDefense +
+                    this.shotQualityOffense + this.shotQualityDefense) / 4;
     }
+
 }

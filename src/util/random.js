@@ -14,3 +14,17 @@ export function gaussian(mean, stdev) {
     while (v === 0) v = Math.random();
     return mean + (Math.sqrt(-2.0 * Math.log(Math.random())) * Math.cos(2.0 * Math.PI * Math.random()) * stdev) 
 }
+
+/** Choose a event from array events, based on the likelihood of that 
+ * event occuring, which is given in weights. weight(events[i]) = weights[i]
+ */
+export function chooseEventUsingWeights(events, weights) {
+    let weightedRand = Math.random() * weights.reduce((a,b) => a+b,0);
+    let sum = 0;
+    for (let i=0; i<events.length; i++) {
+        sum += weights[i];
+        if (weightedRand < sum) {
+            return events[i];
+        }
+    }
+}

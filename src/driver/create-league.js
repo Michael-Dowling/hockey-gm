@@ -1,4 +1,3 @@
-import {gaussian, randInt} from '../util';
 import {Skater, Goalie} from '../player';
 
 const atlanticDivision = {
@@ -12,38 +11,38 @@ const atlanticDivision = {
     'Buffalo Sabres': 'Buf'
 };
 
-const metroDivision = {
-    'New York Rangers': 'NYR',
-    'New York Islanders': 'NYI',
-    'Carolina Hurricanes': 'CAR',
-    'Columbus Blue Jackets': 'CBJ',
-    'New Jersey Devils': 'NJD',
-    'Philadelphia Flyers': 'PHI',
-    'Pittsburgh Penguins': 'PIT',
-    'Washington Capitals': 'WAS'
-};
+// const metroDivision = {
+//     'New York Rangers': 'NYR',
+//     'New York Islanders': 'NYI',
+//     'Carolina Hurricanes': 'CAR',
+//     'Columbus Blue Jackets': 'CBJ',
+//     'New Jersey Devils': 'NJD',
+//     'Philadelphia Flyers': 'PHI',
+//     'Pittsburgh Penguins': 'PIT',
+//     'Washington Capitals': 'WAS'
+// };
 
-const centralDivision = {
-    'Arizona Coyotes': 'ARZ',
-    'Chicago Blackhawks': 'CHI',
-    'Colorado Avalanche': 'COL',
-    'Dallas Stars': 'DAL',
-    'Minnesota Wild': 'MIN',
-    'Nashville Predators': 'NAS',
-    'St. Louis Blues': 'STL',
-    'Winnipeg Jets': 'WIN',
-};
+// const centralDivision = {
+//     'Arizona Coyotes': 'ARZ',
+//     'Chicago Blackhawks': 'CHI',
+//     'Colorado Avalanche': 'COL',
+//     'Dallas Stars': 'DAL',
+//     'Minnesota Wild': 'MIN',
+//     'Nashville Predators': 'NAS',
+//     'St. Louis Blues': 'STL',
+//     'Winnipeg Jets': 'WIN',
+// };
 
-const pacificDivison = {
-    'Anaheim Ducks': 'ANA',
-    'Calgary Flames': 'CAL',
-    'Edmonton Oilers': 'EDM',
-    'Los Angeles Kings': 'LAK',
-    'San Jose Sharks': 'SJS',
-    'Seattle Storm': 'SEA',
-    'Vancouver Canucks': 'VAN',
-    'Vegas Golden Knights': 'VGK'
-}
+// const pacificDivison = {
+//     'Anaheim Ducks': 'ANA',
+//     'Calgary Flames': 'CAL',
+//     'Edmonton Oilers': 'EDM',
+//     'Los Angeles Kings': 'LAK',
+//     'San Jose Sharks': 'SJS',
+//     'Seattle Storm': 'SEA',
+//     'Vancouver Canucks': 'VAN',
+//     'Vegas Golden Knights': 'VGK'
+// }
 
 function genTeams() {
     let teams = []
