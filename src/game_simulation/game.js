@@ -60,12 +60,9 @@ function chooseShooter(players) {
     const positions = Object.keys(shotOddsByPosition);
     for (let i = 0; i<5; i++) {
         shotOdds.push(oddsByPosition[i] * players[positions[i]].shotQualityOffense);
-        // console.log(players[positions[i]])
-        // console.log(players[positions[i]].shotContributionOdds);
     }
     
     let position = chooseEventUsingWeights(positions, shotOdds);
-    // console.log(position)
     return players[position];
 }
 

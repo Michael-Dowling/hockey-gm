@@ -1,4 +1,4 @@
-import {gaussian, randInt} from '../util'
+import {gaussian} from '../util';
 
 const offensiveCategories = [
     'Offensive Intelligence',
@@ -35,7 +35,7 @@ export default class Skater {
         this.defensiveRatings = [];
         this.athleticRatings = [];
         this.createPlayer(position);
-        this.age = randInt(18, 36);
+        this.age = Math.max(18,gaussian(28,5));
         this.calculateOveralls();
         this.seasonShots = 0;
         this.seasonGoals = 0;

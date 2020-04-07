@@ -1,12 +1,33 @@
 import Game from '../game_simulation/game';
 
+function daySchedule8Teams(day, offset) {
+    if (day % 2 === 0) {
+        return [
+            [7 + offset        ,  day%7 + offset   ],
+            [(day+6)%7 + offset, (day+1)%7 + offset],
+            [(day+5)%7 + offset, (day+2)%7 + offset],
+            [(day+4)%7 + offset, (day+3)%7 + offset]
+        ]
+    } 
+    return [
+        [day%7 + offset    ,  7 + offset       ],
+        [(day+6)%7 + offset, (day+1)%7 + offset],
+        [(day+5)%7 + offset, (day+2)%7 + offset],
+        [(day+4)%7 + offset, (day+3)%7 + offset]
+    ]
+}
+
 
 export default class Season {
-    constructor(teams, schedule) {
+    constructor(divisions, schedule) {
         this.games = [];
-        this.teams = teams;
-        this.schedule = schedule;
-        this.seasonLength = schedule.length;
+        this.divisions = divisions;
+        this.teams = [];
+        for (const division in divisions) {
+            this.teams.push(...divisions[division]);
+        }
+        this.schedule = this.genSchedule();
+        this.seasonLength = this.schedule.length;
     }
 
     simSeason() {
@@ -66,5 +87,19 @@ export default class Season {
 
         return game
 
+    }
+
+    genSchedule() {
+        let schedule = [];
+        
+        for (let i=0; i<82; i++) {
+            let offset = 0;
+            schedule[i] = []
+            for (let j=0; j<4; j++) { 
+                schedule[i].push(...daySchedule8Teams(i, offset));
+                offset += 8;
+            }  
+        }
+        return schedule;
     }
 }
