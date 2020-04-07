@@ -10,7 +10,7 @@ function compare(team1, team2) {
     return -1;
 }
 
-export default class StandingsTable extends React.Component {
+class StandingsTable extends React.Component {
     render() {
         return(
             <Table bordered size="sm">
@@ -52,3 +52,5 @@ export default class StandingsTable extends React.Component {
         )
     }
 }
+
+export {StandingsTable, compare};
