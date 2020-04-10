@@ -29,6 +29,8 @@ export default class Season {
         }
         this.schedule = this.genSchedule();
         this.seasonLength = this.schedule.length;
+
+        this.newSeason = this.newSeason.bind(this);
     }
 
     simSeason() {
@@ -111,5 +113,27 @@ export default class Season {
             }  
         }
         return schedule;
+    }
+
+    newSeason() {
+        // calculate player progressions and reset stats for every team
+        for (let i=0; i<this.teams.length; i++) {
+            const team = this.teams[i];
+            team.seasonWins = 0;
+            team.seasonLosses = 0;
+            team.seasonOTL = 0;
+            team.seasonPoints = 0;
+            team.seasonGF = 0;
+            team.seasonGA = 0;
+            team.seasonSF = 0;
+            team.seasonSA = 0;
+            team.seasonGP = 0;
+            team.seasonRW = 0;
+            team.seasonROW = 0;
+            for (const position in team.players) {
+                // player progression
+                team.players[position].progression();
+            }
+        }
     }
 }

@@ -68,6 +68,7 @@ export default class Playoffs {
         this.series[0] = getFirstRound(divisions);
         this.simDay = this.simDay.bind(this);
         this.round = 0;
+        this.done = false;
     }  
 
     simDay() {
@@ -85,6 +86,17 @@ export default class Playoffs {
             // set up the next round
             this.series[r+1] = getNextRound(this.series[r]);
             this.round++;
+        } else if (roundOver) {
+            this.done = true;
         }
+    }
+
+    simRound() {
+        const curRound = this.round;
+        while (this.round === curRound && !this.done)  this.simDay();
+    }
+
+    simPlayoffs() {
+        while (!this.done) this.simDay();
     }
 }

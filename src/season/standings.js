@@ -81,7 +81,7 @@ export default class Standings extends React.Component{
                 <button onClick={() => this.changeView('league')}>League</button>
                 <button onClick={() => this.changeView('division')}>Divisions</button>
                 <button onClick={() => this.changeView('wc')}>Wild Card</button>
-                <Link to="/playoffs">Playoffs</Link>
+                <Link to="/playoffs"><button>Playoffs</button></Link>
                 {tables}
             </>
         );

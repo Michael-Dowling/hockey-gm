@@ -1,6 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import PlayoffMatchup from './playoff-matchup'
+import {Link} from 'react-router-dom'
 
 export default class PlayoffBracket extends React.Component {
 
@@ -20,7 +21,15 @@ export default class PlayoffBracket extends React.Component {
                 { this.props.playoffs.series[3].map( (s, ind) => (
                     <PlayoffMatchup series={s} key={ind+14}/>
                 ))}
-                <button onClick={this.props.simDay}>Advance Day</button>
+                { !this.props.playoffs.done ? (
+                    <div>
+                        <button onClick={this.props.simDay}>Advance Day</button>
+                        <button onClick={this.props.simRound}>Advance Round</button>
+                        <button onClick={this.props.simPlayoffs}>Simulate Playoffs</button> 
+                    </div>
+                    ) : (
+                    <Link to="/"><button onClick={this.props.newSeason}>Next Season</button></Link>
+                )}
             </div>
         );
     }
