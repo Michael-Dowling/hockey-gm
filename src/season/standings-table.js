@@ -1,14 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import Table from 'react-bootstrap/Table';
-
-function compare(team1, team2) {
-    if (team1.seasonPoints < team2.seasonPoints)
-        return 1;
-    else if (team1.seasonPoints === team2.seasonPoints)
-        return 0;
-    return -1;
-}
+import {compareTeams} from '../util';
 
 class StandingsTable extends React.Component {
     render() {
@@ -24,6 +17,7 @@ class StandingsTable extends React.Component {
                         <th>+/-</th>
                         <th>S%</th>
                         <th>SV%</th>
+                        <th>GP</th>
                         <th>Wins</th>
                         <th>Losses</th>
                         <th>OTL</th>
@@ -31,7 +25,7 @@ class StandingsTable extends React.Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.props.teams.sort(compare).map((t) => (
+                    {this.props.teams.sort(compareTeams).map((t) => (
                         <tr key={t.abbr}>
                             <td>{t.name}</td>
                             <td>{t.seasonSF}</td>
@@ -41,6 +35,7 @@ class StandingsTable extends React.Component {
                             <td>{t.seasonGF-t.seasonGA}</td>
                             <td>{(t.seasonGF/t.seasonSF*100).toFixed(1)}</td>
                             <td>{((1-t.seasonGA/t.seasonSA)*100).toFixed(1)}</td>
+                            <td>{t.seasonGP}</td>
                             <td>{t.seasonWins}</td>
                             <td>{t.seasonLosses}</td>
                             <td>{t.seasonOTL}</td>
@@ -53,4 +48,4 @@ class StandingsTable extends React.Component {
     }
 }
 
-export {StandingsTable, compare};
+export {StandingsTable};

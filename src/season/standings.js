@@ -1,20 +1,21 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
+import {Link} from 'react-router-dom'
 
-import {StandingsTable, compare} from './standings-table'
+import {StandingsTable} from './standings-table'
+import {compareTeams} from '../util'
 
 
 export default class Standings extends React.Component{
     constructor(props) {
         super(props);
-        this.changeView.bind(this);
         this.state = {
             view : props.view
         };
     }
 
     changeView(newView) {
-        this.setState(state => ({
+        this.setState( () => ({
             view: newView
           }));
     }
@@ -43,7 +44,7 @@ export default class Standings extends React.Component{
             let westWCTeams = [];
             tables = [];
             for (let i=0; i<divisions.length; i++) {
-                divisions[i][1].sort(compare);
+                divisions[i][1].sort(compareTeams);
                 if (i < divisions.length/2) {
                     eastWCTeams.push(...divisions[i][1].slice(3))
                 }
@@ -77,12 +78,10 @@ export default class Standings extends React.Component{
         return (
             <>
                 <h1>League Standings</h1>
-                <>
                 <button onClick={() => this.changeView('league')}>League</button>
                 <button onClick={() => this.changeView('division')}>Divisions</button>
                 <button onClick={() => this.changeView('wc')}>Wild Card</button>
-                </>
-                <button>Playoffs</button>
+                <Link to="/playoffs">Playoffs</Link>
                 {tables}
             </>
         );

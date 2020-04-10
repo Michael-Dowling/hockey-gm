@@ -1,4 +1,5 @@
-import Game from '../game_simulation/game';
+import {Game} from '../game_simulation';
+import {Playoffs} from '../playoffs'
 
 function daySchedule8Teams(day, offset) {
     if (day % 2 === 0) {
@@ -37,7 +38,9 @@ export default class Season {
         }
 
         console.log("season over");
-        console.log(this.teams)
+        console.log(this.teams);
+        console.log("generating playoff seeds");
+        this.playoffs = new Playoffs(this.divisions);
     }
 
     simDay(dayOfSeason) {
@@ -52,9 +55,12 @@ export default class Season {
                 if (game.period > 3){
                     away.seasonOTL++;
                     away.seasonPoints++;
+                    home.seasonROW++;
                 }
                 else {
                     away.seasonLosses++
+                    home.seasonRW++;
+                    home.seasonROW++;
                 }
             } else {
                 away.seasonWins++;
@@ -62,20 +68,24 @@ export default class Season {
                 if (game.period > 3){
                     home.seasonOTL++;
                     home.seasonPoints++;
+                    away.seasonROW++;
                 }
                 else {
                     home.seasonLosses++
+                    away.seasonRW++;
+                    away.seasonROW++;
                 }
             }
             home.seasonGF += game.homeScore;
             home.seasonGA += game.awayScore;
             home.seasonSF += game.homeShots;
             home.seasonSA += game.awayShots;
+            home.seasonGP++;
             away.seasonGF += game.awayScore;
             away.seasonGA += game.homeScore;
             away.seasonSF += game.awayShots;
             away.seasonSA += game.homeShots;
-
+            away.seasonGP++;
         }
     }
 

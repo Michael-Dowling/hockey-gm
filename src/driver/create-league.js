@@ -81,7 +81,10 @@ function genTeams() {
                 seasonGF : 0,
                 seasonGA : 0,
                 seasonSF : 0,
-                seasonSA : 0
+                seasonSA : 0,
+                seasonGP : 0,
+                seasonRW : 0,
+                seasonROW : 0
             })
         }
     }

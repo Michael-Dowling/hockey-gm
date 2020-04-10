@@ -1,4 +1,4 @@
-import Season from './sim-season';
+import Season from './season';
 import Standings from './standings'
 
 export {Season, Standings};

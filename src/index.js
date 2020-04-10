@@ -1,3 +1,6 @@
+import ReactDOM from 'react-dom';
+import React from 'react';
+
 import {Driver} from './driver';
 
-Driver.run();
+ReactDOM.render(<Driver/>, document.getElementById('root'));

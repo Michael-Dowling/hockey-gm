@@ -1,3 +1,4 @@
 import Scoreboard from './scoreboard'
+import Game from './game'
 
-export {Scoreboard}
+export {Scoreboard, Game}
