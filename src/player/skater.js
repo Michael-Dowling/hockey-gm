@@ -96,22 +96,32 @@ export default class Skater {
 
     /** handle how much the player will improve/regress from one year to the next */
     progression() {
-        const modifier = gaussian((28-this.age)/2, 1-(30-this.age)/15);
+        const modifier = gaussian((28-this.age)/2, Math.abs(30-this.age)/10);
 
         // set new offensive categories
         for (var i = 0; i<offensiveCategories.length; i++) {
-            this.offensiveRatings[i] = this.offensiveRatings[i]+gaussian(modifier,5)
+            this.offensiveRatings[i] += gaussian(modifier,5)
         }
         // set new defensive categories
         for (i = 0; i<defensiveCategories.length; i++) {
-            this.defensiveRatings[i] = this.defensiveRatings[i]+gaussian(modifier,5)
+            this.defensiveRatings[i] += gaussian(modifier,5)
         }
         // set new athletic categories
         for (i=0; i<athleticCategories.length; i++) {
-            this.athleticRatings[i] = this.athleticRatings[i]+gaussian(modifier,5)
+            this.athleticRatings[i] += gaussian(modifier,5)
         }
 
         this.calculateOveralls();
+        this.age++;
+        this.resetCountingStats();
     }
+
+    resetCountingStats() {
+        this.seasonShots = 0;
+        this.seasonGoals = 0;
+        this.seasonAssists = 0;
+    }
+
+
 
 }

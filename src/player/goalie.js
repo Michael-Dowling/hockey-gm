@@ -14,6 +14,7 @@ export default class Goalie {
     constructor() {
         this.position = "G";
         this.ratings = []
+        this.age = gaussian(29, 5);
         this.createPlayer()
     }
 
@@ -32,12 +33,13 @@ export default class Goalie {
     }
 
     progression() {
-        const modifier = gaussian((28-this.age)/2, 1-(30-this.age)/10);
+        const modifier = gaussian((28-this.age)/2, Math.abs(30-this.age)/10);
         let ratingsSum = 0;
         for(let i=0; i<goalieCategories.length; i++) {
-            this.ratings[i] = this.ratings[i] + gaussian(modifier, 5)
+            this.ratings[i] += gaussian(modifier, 5)
             ratingsSum += this.ratings[i];
         }
-        this.overall = ratingsSum / goalieCategories.length;
+        this.overall = ratingsSum/goalieCategories.length;
+        this.age++;
     }
 }
