@@ -36,10 +36,13 @@ export default class Skater {
         this.athleticRatings = [];
         this.createPlayer(position);
         this.age = Math.max(18,gaussian(28,5));
+        this.roundedAge = Math.round(this.age);
         this.calculateOveralls();
         this.seasonShots = 0;
         this.seasonGoals = 0;
         this.seasonAssists = 0;
+        this.seasonPoints = 0;
+        this.name = "Auston Matthews"
 
         this.calculateOveralls = this.calculateOveralls.bind(this);
         this.progression = this.progression.bind(this);
@@ -92,6 +95,7 @@ export default class Skater {
         this.shotQualityDefense = (dTotal*1.5+aTotal)/(this.defensiveRatings.length*1.5+this.athleticRatings.length);
         this.overall =  (this.playDrivingOffense + this.playDrivingDefense +
                     this.shotQualityOffense + this.shotQualityDefense) / 4;
+        this.roundedOverall = Math.round(this.overall);
     }
 
     /** handle how much the player will improve/regress from one year to the next */
@@ -113,6 +117,7 @@ export default class Skater {
 
         this.calculateOveralls();
         this.age++;
+        this.roundedAge++;
         this.resetCountingStats();
     }
 
@@ -120,8 +125,7 @@ export default class Skater {
         this.seasonShots = 0;
         this.seasonGoals = 0;
         this.seasonAssists = 0;
+        this.seasonPoints = 0;
     }
-
-
 
 }

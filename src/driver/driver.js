@@ -1,8 +1,10 @@
 import React from 'react';
+
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import {Scoreboard} from '../game_simulation';
+import {Scoreboard} from '../game-simulation';
 import {Season, Standings} from '../season';
 import {PlayoffBracket} from '../playoffs';
+import { Team } from '../team';
 import createLeagueHelper from './create-league';
 
 
@@ -79,6 +81,12 @@ export default class Driver extends React.Component {
                                 />}
                         />
                         <Route path="/scoreboard" component={Scoreboard}/>
+                        <Route path="/team"
+                            render={(props) => 
+                                <Team {...props}
+                                    season={this.state.season}
+                                />}
+                        />
                     </Switch>
                 </div>
             </BrowserRouter>

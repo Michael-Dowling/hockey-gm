@@ -1,4 +1,4 @@
-import {Game} from '../game_simulation';
+import {Game} from '../game-simulation';
 import {Playoffs} from '../playoffs'
 
 function daySchedule8Teams(day, offset) {

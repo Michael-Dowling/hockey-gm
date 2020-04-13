@@ -13,9 +13,12 @@ const goalieCategories = [
 export default class Goalie {
     constructor() {
         this.position = "G";
+        this.name = "Freddie Andersen"
         this.ratings = []
         this.age = gaussian(29, 5);
+        this.roundedAge = Math.round(this.age);
         this.createPlayer()
+        this.roundedOverall = Math.round(this.overall);
     }
 
     createPlayer() {
@@ -40,6 +43,8 @@ export default class Goalie {
             ratingsSum += this.ratings[i];
         }
         this.overall = ratingsSum/goalieCategories.length;
+        this.roundedOverall = Math.round(this.overall);
         this.age++;
+        this.roundedAge++;   
     }
 }

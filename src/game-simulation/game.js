@@ -153,6 +153,7 @@ export default class Game {
             if (Math.random() > this.saveOdds("home", shooter)){
                 //home goal
                 shooter.seasonGoals++;
+                shooter.seasonPoints++;
                 this.prevPlay = endResultEvents.GOAL;
                 this.homeScore++;
                 this.homeGperP[Math.min(this.period - 1, 3)]++;
@@ -171,6 +172,7 @@ export default class Game {
         if (Math.random() > this.saveOdds("away", shooter)){
             //away goal
             shooter.seasonGoals++;
+            shooter.seasonPoints++;
             this.prevPlay = endResultEvents.GOAL;
             this.awayScore++;
             this.awayGperP[Math.min(this.period - 1, 3)]++;
