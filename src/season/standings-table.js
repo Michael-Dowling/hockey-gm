@@ -1,12 +1,14 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import Table from 'react-bootstrap/Table';
+import {Link} from 'react-router-dom';
+
 import {compareTeams} from '../util';
 
 class StandingsTable extends React.Component {
     render() {
         return(
-            <Table bordered size="sm">
+            <Table bordered size="sm" striped>
                 <thead>
                     <tr>
                         <th>Team</th>
@@ -27,7 +29,12 @@ class StandingsTable extends React.Component {
                 <tbody>
                     {this.props.teams.sort(compareTeams).map((t) => (
                         <tr key={t.abbr}>
-                            <td>{t.name}</td>
+                            <td><Link to={{
+                                pathname: '/team',
+                                state: {
+                                    teamName: t.name
+                                }
+                            }}>{t.name}</Link></td>
                             <td>{t.seasonSF}</td>
                             <td>{t.seasonSA}</td>
                             <td>{t.seasonGF}</td>

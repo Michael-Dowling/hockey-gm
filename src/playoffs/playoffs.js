@@ -1,4 +1,4 @@
-import {Game} from '../game_simulation';
+import {Game} from '../game-simulation';
 import {splitDivisionsIntoWC, compareTeams} from '../util';
 
 class Series {
