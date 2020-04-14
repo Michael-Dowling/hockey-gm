@@ -5,8 +5,11 @@ import {Scoreboard} from '../game-simulation';
 import {Season, Standings} from '../season';
 import {PlayoffBracket} from '../playoffs';
 import { Team } from '../team';
+<<<<<<< HEAD
 import { NavBar } from '../navigation';
 
+=======
+>>>>>>> 13ec890ed58f32db1dc1d8b2dd4873913354efd3
 import createLeagueHelper from './create-league';
 
 
