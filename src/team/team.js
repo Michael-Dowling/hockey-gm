@@ -4,10 +4,6 @@ import BootstrapTable from 'react-bootstrap-table-next';
 
 
 function PlayerStats(props) {
-<<<<<<< HEAD
-=======
-    console.log(props);
->>>>>>> 13ec890ed58f32db1dc1d8b2dd4873913354efd3
     return (
         <BootstrapTable 
             keyField="age"
