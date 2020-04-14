@@ -20,8 +20,8 @@ class StandingsTable extends React.Component {
                         <th>S%</th>
                         <th>SV%</th>
                         <th>GP</th>
-                        <th>Wins</th>
-                        <th>Losses</th>
+                        <th>W</th>
+                        <th>L</th>
                         <th>OTL</th>
                         <th>Points</th>
                     </tr>
@@ -40,8 +40,8 @@ class StandingsTable extends React.Component {
                             <td>{t.seasonGF}</td>
                             <td>{t.seasonGA}</td>
                             <td>{t.seasonGF-t.seasonGA}</td>
-                            <td>{(t.seasonGF/t.seasonSF*100).toFixed(1)}</td>
-                            <td>{((1-t.seasonGA/t.seasonSA)*100).toFixed(1)}</td>
+                            <td>{t.seasonGP===0? 0: (t.seasonGF/t.seasonSF*100).toFixed(1)}</td>
+                            <td>{t.seasonGP===0? 0: ((1-t.seasonGA/t.seasonSA)*100).toFixed(1)}</td>
                             <td>{t.seasonGP}</td>
                             <td>{t.seasonWins}</td>
                             <td>{t.seasonLosses}</td>

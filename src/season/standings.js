@@ -1,6 +1,5 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import {Link} from 'react-router-dom'
 
 import {StandingsTable} from './standings-table'
 import {compareTeams} from '../util'
@@ -69,7 +68,7 @@ export default class Standings extends React.Component{
             }
             tables.push(
                 <div key='WestWC' >
-                    <h3>{'Wester Conference Wild Card'}</h3>
+                    <h3>{'Western Conference Wild Card'}</h3>
                     <StandingsTable teams={westWCTeams} />
                 </div>
             )
@@ -81,7 +80,6 @@ export default class Standings extends React.Component{
                 <button onClick={() => this.changeView('league')}>League</button>
                 <button onClick={() => this.changeView('division')}>Divisions</button>
                 <button onClick={() => this.changeView('wc')}>Wild Card</button>
-                <Link to="/playoffs"><button>Playoffs</button></Link>
                 {tables}
             </>
         );

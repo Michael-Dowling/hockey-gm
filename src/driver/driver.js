@@ -5,6 +5,8 @@ import {Scoreboard} from '../game-simulation';
 import {Season, Standings} from '../season';
 import {PlayoffBracket} from '../playoffs';
 import { Team } from '../team';
+import { NavBar } from '../navigation';
+
 import createLeagueHelper from './create-league';
 
 
@@ -13,14 +15,15 @@ export default class Driver extends React.Component {
         super();
         var league = new createLeagueHelper();
         var season = new Season(league.teams, league.schedule);
-
-        season.simSeason();
-        console.log(season.divisions);
-        console.log(season.teams)
-        this.simDay = this.simDay.bind(this)
-        this.simRound = this.simRound.bind(this)
-        this.simPlayoffs = this.simPlayoffs.bind(this)
-        this.newSeason = this.newSeason.bind(this)
+        this.playerTeam = season.teams[0].name;
+        
+        this.simDay = this.simDay.bind(this);
+        this.simWeek = this.simWeek.bind(this);
+        this.simRound = this.simRound.bind(this);
+        this.simMonth = this.simMonth.bind(this);
+        this.simSeason = this.simSeason.bind(this);
+        this.simPlayoffs = this.simPlayoffs.bind(this);
+        this.newSeason = this.newSeason.bind(this);
 
         this.state = {
             league: league,
@@ -36,32 +39,77 @@ export default class Driver extends React.Component {
 
     simDay() {
         let s = this.state.season;
-        s.playoffs.simDay();
+        if (s.playoffsStarted) {
+            s.playoffs.simDay();
+            if (s.playoffs.done)
+                s.newSeason();
+        }
+        else {
+            s.simDay()
+        }
         this.updateSeason(s)
+    }
+
+    simWeek() {
+        let s = this.state.season;
+        let i=0;
+        while (i<7 && !s.playoffsStarted) {
+            s.simDay();
+            i++
+        }
+        this.updateSeason(s);
+    }
+
+    simMonth() {
+        let s = this.state.season;
+        let i=0;
+        while (i<30 && !s.playoffsStarted) {
+            s.simDay();
+            i++
+        }
+        this.updateSeason(s);
+    }
+
+    simSeason() {
+        let s = this.state.season;
+        s.simSeason();
+        this.updateSeason(s);
     }
 
     simRound() {
         let s = this.state.season;
         s.playoffs.simRound();
-        this.updateSeason(s)
+        if (s.playoffs.done)
+            s.newSeason();
+        this.updateSeason(s);
     }
 
     simPlayoffs() {
         let s = this.state.season;
         s.playoffs.simPlayoffs();
+        s.newSeason();
         this.updateSeason(s);
     }
 
     newSeason() {
         let s = this.state.season;
         s.newSeason();
-        s.simSeason();
         this.updateSeason(s);
     }
 
     render() {
-        return (
+        return (  
             <BrowserRouter>
+            <NavBar 
+                playerTeam={this.playerTeam} 
+                simDay={this.simDay}
+                simWeek={this.simWeek}
+                simMonth={this.simMonth}
+                simToPlayoffs={this.simSeason}
+                playoffs={this.state.season.playoffsStarted}
+                simRound={this.simRound}
+                simPlayoffs={this.simPlayoffs}
+            />
                 <div>
                     <Switch>
                         <Route 

@@ -20,7 +20,7 @@ function daySchedule8Teams(day, offset) {
 
 
 export default class Season {
-    constructor(divisions, schedule) {
+    constructor(divisions) {
         this.games = [];
         this.divisions = divisions;
         this.teams = [];
@@ -29,27 +29,28 @@ export default class Season {
         }
         this.schedule = this.genSchedule();
         this.seasonLength = this.schedule.length;
+        this.dayOfSeason = 0;
+        this.playoffsStarted = false;
 
         this.newSeason = this.newSeason.bind(this);
     }
 
     simSeason() {
-        for (let i=0; i<this.seasonLength; i++) {
-            this.simDay(i);
-            this.dayOfSeason = i;
+        while (this.dayOfSeason < this.seasonLength) {
+            this.simDay();
         }
-
-        console.log("season over");
-        console.log(this.teams);
-        console.log("generating playoff seeds");
-        this.playoffs = new Playoffs(this.divisions);
     }
 
-    simDay(dayOfSeason) {
-        let games = this.schedule[dayOfSeason]
+    startPlayoffs() {
+        this.playoffs = new Playoffs(this.divisions);
+        this.playoffsStarted = true;
+    }
+
+    simDay() {
+        let games = this.schedule[this.dayOfSeason]
         for (let i=0; i<games.length; i++) {
-            let home = this.teams[games[i][0]]
-            let away = this.teams[games[i][1]]
+            let home = this.teams[games[i][0]];
+            let away = this.teams[games[i][1]];
             let game = this.simGame(home, away)
             if (game.homeScore > game.awayScore) {
                 home.seasonWins++;
@@ -89,6 +90,10 @@ export default class Season {
             away.seasonSA += game.homeShots;
             away.seasonGP++;
         }
+        this.dayOfSeason++;
+        if (this.dayOfSeason === this.seasonLength) {
+            this.startPlayoffs();
+        }
     }
 
     simGame(home, away){
@@ -97,7 +102,7 @@ export default class Season {
 
         this.games.push(game);
 
-        return game
+        return game;
 
     }
 
@@ -106,7 +111,7 @@ export default class Season {
         
         for (let i=0; i<82; i++) {
             let offset = 0;
-            schedule[i] = []
+            schedule[i] = [];
             for (let j=0; j<4; j++) { 
                 schedule[i].push(...daySchedule8Teams(i, offset));
                 offset += 8;
@@ -135,5 +140,7 @@ export default class Season {
                 team.players[position].progression();
             }
         }
+        this.dayOfSeason = 0;
+        this.playoffsStarted = false;
     }
 }
