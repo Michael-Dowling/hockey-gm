@@ -95,7 +95,6 @@ function genTeams() {
 export default class createLeagueHelper {
     constructor() {
         this.teams = genTeams();
-        console.log(this.teams);
     }
 
     getTeams() { return this.teams;}

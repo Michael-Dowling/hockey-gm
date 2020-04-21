@@ -37,7 +37,11 @@ const shotOddsByPosition = {
  * the player is at driving play offensively and defensively */
 function shotContributionOdds(player, position) {
     if (position === player.position)
-        return [player.playDrivingOffense, player.playDrivingDefense];
+        return player.playDrivingOffense;
+}
+
+function shotSuppressionOdds(player, position) {
+    return player.playDrivingDefense;
 }
 
 function goalieSaveOdds(goalie) {
@@ -95,22 +99,32 @@ export default class Game {
     /** Calculate the odds of a shot being taken by the home team */
     shotOdds(){
         // look at offensive strength of players on ice
-        let [homeShotOdds, homeSuppressionOdds] = 
-            shotContributionOdds(this.homePlayersOn.C, 'C') +
+        let homeShotOdds = shotContributionOdds(this.homePlayersOn.C, 'C') +
             shotContributionOdds(this.homePlayersOn.LW, 'LW') +
             shotContributionOdds(this.homePlayersOn.RW, 'RW') +
             shotContributionOdds(this.homePlayersOn.D1, 'D') +
             shotContributionOdds(this.homePlayersOn.D2, 'D');
         
-        let [awayShotOdds, awaySuppressionOdds] = 
-            shotContributionOdds(this.awayPlayersOn.C, 'C') +
+        let homeSuppressionOdds = shotSuppressionOdds(this.homePlayersOn.C, 'C') +
+            shotSuppressionOdds(this.homePlayersOn.LW, 'LW') +
+            shotSuppressionOdds(this.homePlayersOn.RW, 'RW') +
+            shotSuppressionOdds(this.homePlayersOn.D1, 'D') +
+            shotSuppressionOdds(this.homePlayersOn.D2, 'D');
+                
+        let awayShotOdds = shotContributionOdds(this.awayPlayersOn.C, 'C') +
             shotContributionOdds(this.awayPlayersOn.LW, 'LW') +
             shotContributionOdds(this.awayPlayersOn.RW, 'RW') +
             shotContributionOdds(this.awayPlayersOn.D1, 'D') +
             shotContributionOdds(this.awayPlayersOn.D2, 'D');
         
-        let shotChance = 0.5 + (homeShotOdds - awaySuppressionOdds) * 0.009 - 
-                (awayShotOdds - homeSuppressionOdds) * 0.009;
+        let awaySuppressionOdds = shotSuppressionOdds(this.awayPlayersOn.C, 'C') +
+            shotSuppressionOdds(this.awayPlayersOn.LW, 'LW') +
+            shotSuppressionOdds(this.awayPlayersOn.RW, 'RW') +
+            shotSuppressionOdds(this.awayPlayersOn.D1, 'D') +
+            shotSuppressionOdds(this.awayPlayersOn.D2, 'D');
+        
+        let shotChance = 0.5 + (homeShotOdds - awaySuppressionOdds) * 0.001 - 
+                (awayShotOdds - homeSuppressionOdds) * 0.001;
         
         // TODO: account for game situation (PP, EN, etc.)
 

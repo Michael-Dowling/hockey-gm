@@ -6,6 +6,7 @@ import {Season, Standings} from '../season';
 import {PlayoffBracket} from '../playoffs';
 import { Team } from '../team';
 import { NavBar } from '../navigation';
+import { Trades } from '../trades'
 
 import createLeagueHelper from './create-league';
 
@@ -134,6 +135,14 @@ export default class Driver extends React.Component {
                                 <Team {...props}
                                     season={this.state.season}
                                 />}
+                        />
+                        <Route path="/trades"
+                            render={(props) =>
+                                <Trades {...props}
+                                    teamName={this.playerTeam}
+                                    season={this.state.season}
+                                />
+                            }
                         />
                     </Switch>
                 </div>

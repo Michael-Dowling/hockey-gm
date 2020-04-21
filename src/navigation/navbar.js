@@ -22,6 +22,7 @@ export default function NavBar (props) {
                 </>
             ) : (
                 <>
+                    <Link to="/trades"><button>Trades</button></Link>
                     <button onClick={props.simDay}>Simulate Day</button>
                     <button onClick={props.simWeek}>Simulate Week</button>
                     <button onClick={props.simMonth}>Simulate Month</button>
