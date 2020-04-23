@@ -1,4 +1,5 @@
 import { gaussian } from '../util'
+import {getName, getNationality} from './naming';
 
 const goalieCategories = [
     'Positioning',
@@ -13,11 +14,12 @@ const goalieCategories = [
 export default class Goalie {
     constructor() {
         this.position = "G";
-        this.name = "Freddie Andersen"
-        this.ratings = []
+        this.nationality = getNationality();
+        this.name = getName(this.nationality);
+        this.ratings = [];
         this.age = gaussian(29, 5);
         this.roundedAge = Math.round(this.age);
-        this.createPlayer()
+        this.createPlayer();
         this.roundedOverall = Math.round(this.overall);
     }
 

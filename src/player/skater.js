@@ -1,4 +1,5 @@
 import {gaussian} from '../util';
+import {getName, getNationality} from './naming';
 
 const offensiveCategories = [
     'Offensive Intelligence',
@@ -8,7 +9,7 @@ const offensiveCategories = [
     'Wrist Shot Accuracy',
     'Slap Shot Power',
     'Slap Shot Accuracy'
-]
+];
 
 const defensiveCategories = [
     'Defensive Intelligence',
@@ -18,7 +19,7 @@ const defensiveCategories = [
     'Stick Checking',
     'Faceoffs',
     'Positioning'
-]
+];
 
 const athleticCategories = [
     'Skating',
@@ -26,7 +27,7 @@ const athleticCategories = [
     'Strength',
     'Acceleration',
     'Balance'
-]
+];
 
 export default class Skater {
     constructor(position) {
@@ -42,7 +43,8 @@ export default class Skater {
         this.seasonGoals = 0;
         this.seasonAssists = 0;
         this.seasonPoints = 0;
-        this.name = "Auston Matthews"
+        this.nationality = getNationality()
+        this.name = getName(this.nationality)
 
         this.calculateOveralls = this.calculateOveralls.bind(this);
         this.progression = this.progression.bind(this);
